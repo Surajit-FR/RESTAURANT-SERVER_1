@@ -5,11 +5,12 @@ const CreateToken = require('../../helpers/create_token');
 
 // LoginRegular
 exports.LoginRegular = async (req, res) => {
+    const { remember_me } = req.body;
     try {
         // Accessing the user object attached by the middleware 
         const _user = req.user;
 
-        const USER_DATA = await UserModel.findById(_user._id)
+        const _DATA = await UserModel.findById(_user._id)
             .populate({
                 path: 'role',
                 populate: {
@@ -19,6 +20,7 @@ exports.LoginRegular = async (req, res) => {
                 select: '-_id -createdAt -updatedAt -__v -role.permissions'
             })
             .exec();
+        const USER_DATA = { ..._DATA._doc, remember_me };
         const tokenData = CreateToken(USER_DATA);
         return res.status(200).json({ success: true, message: "Login Successful!", data: USER_DATA, token: tokenData });
     } catch (exc) {

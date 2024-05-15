@@ -9,6 +9,7 @@ const CreateToken = (user) => {
         phone: user.phone,
         password: user.password,
         role: user.role,
+        remember_me: user.remember_me,
         is_active: user.is_active,
         is_delete: user.is_delete,
     }, secret_key, { expiresIn: process.env.SESSION_TIME });
