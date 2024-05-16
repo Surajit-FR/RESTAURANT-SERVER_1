@@ -9,6 +9,7 @@ const http = require('http');
 
 const AuthRoutes = require('./routes/auth.routes');
 const Role_PermissionRoutes = require('./routes/admin/role_permission.routes');
+const Product_CategoryRoutes = require('./routes/admin/product_category.routes');
 
 require('dotenv').config();
 
@@ -64,7 +65,10 @@ app.get('/health', (req, res) => {
 
 /* ADMIN */
 // ADMIN API routes
-app.use('/admin/api', Role_PermissionRoutes);
+app.use('/admin/api', [
+    Role_PermissionRoutes,
+    Product_CategoryRoutes
+]);
 
 /* AUTH */
 // API routes
