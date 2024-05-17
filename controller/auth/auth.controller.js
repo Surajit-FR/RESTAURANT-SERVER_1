@@ -24,7 +24,7 @@ exports.LoginRegular = async (req, res) => {
         const tokenData = CreateToken(USER_DATA);
         return res.status(200).json({ success: true, message: "Login Successful!", data: USER_DATA, token: tokenData });
     } catch (exc) {
-        return res.status(500).json({ success: false, messaage: "Internal server error", error: exc.message });
+        return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
     };
 };
 
@@ -45,6 +45,6 @@ exports.RegisterRegular = async (req, res) => {
         const tokenData = CreateToken(USER_DATA);
         return res.status(201).json({ success: true, message: "Registered Successfully!", data: USER_DATA, token: tokenData });
     } catch (exc) {
-        return res.status(500).json({ success: false, messaage: "Internal server error", error: exc.message });
+        return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
     };
 };
