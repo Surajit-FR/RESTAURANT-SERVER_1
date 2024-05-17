@@ -6,7 +6,7 @@ module.exports = (PermissionModel) => {
             "string.empty": "A name is required!",
             "string.pattern.base": "Only lower case alphabets and '_' are allowed",
         }),
-        description: JOI.string(),
+        description: JOI.allow('').optional(),
     })
 
     return UserSchema.validate(PermissionModel);

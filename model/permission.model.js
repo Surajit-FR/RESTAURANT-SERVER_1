@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const PermissionSchema = new Schema({
     name: { type: String, required: true },
-    description: { type: String },
+    description: { type: String, required: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model('permission', PermissionSchema);

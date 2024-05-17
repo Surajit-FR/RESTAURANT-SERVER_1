@@ -6,8 +6,8 @@ const { VerifyToken, Authorize } = require('../../middleware/auth/auth_user');
 const CategoryController = require('../../controller/admin/category.controller');
 const ValidateCategory = require('../../model/validator/category.validate');
 
-/**************************************************** PERMISSION ROUTES ****************************************************/
-// Add new permission
+/**************************************************** CATEGORY ROUTES ****************************************************/
+// Add new category
 router.post('/add/new/category', [
     RequestRate.Limiter,
     ModelAuth(ValidateCategory),
@@ -15,12 +15,19 @@ router.post('/add/new/category', [
     Authorize(["*", "write_create"])
 ], CategoryController.CreateCategory);
 
-// Get all permission
+// Get all category
 router.get('/get/all/category', [
     RequestRate.Limiter,
     VerifyToken,
     Authorize(["*", "read"])
 ], CategoryController.GetAllCategory);
+
+// Delete category
+router.delete('/delete/category/:category_id', [
+    RequestRate.Limiter,
+    VerifyToken,
+    Authorize(["*", "delete"])
+], CategoryController.DeleteCategory);
 
 
 module.exports = router;

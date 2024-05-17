@@ -6,7 +6,7 @@ module.exports = (RoleModel) => {
             "string.empty": "A name is required!",
             "string.pattern.base": "Only alphabets are allowed",
         }),
-        category_desc: JOI.string(),
+        category_desc: JOI.allow("").optional(),
     })
 
     return CategorySchema.validate(RoleModel);
