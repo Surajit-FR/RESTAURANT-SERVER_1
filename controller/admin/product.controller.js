@@ -36,3 +36,61 @@ exports.CreateProduct = async (req, res) => {
         return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
     }
 };
+
+// GetAllProduct
+exports.GetAllProduct = async (req, res) => {
+    try {
+        // Pagination parameters
+        const page = parseInt(req.query.page);
+        const pageSize = parseInt(req.query.pageSize);
+
+        // Calculate skip value
+        const skip = (page - 1) * pageSize;
+        const all_product_data = await ProductModel
+            .find({ is_delete: false })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(pageSize);
+
+        // Count total number of documents
+        const totalCount = await ProductModel.countDocuments({ is_delete: false });
+
+        // Calculate total pages
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        return res.status(200).json({
+            success: true,
+            message: "Data fetched successfully!",
+            data: all_product_data,
+            totalPages: totalPages,
+            currentPage: page
+        });
+
+    } catch (exc) {
+        return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
+    }
+}
+
+// DeleteProduct
+exports.DeleteProduct = async (req, res) => {
+    const { product_id } = req.params;
+
+    try {
+        // Find and delete the product by ID
+        const deletedProduct = await ProductModel.findByIdAndDelete({ _id: product_id });
+
+        if (!deletedProduct) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found"
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Product deleted successfully!"
+        });
+
+    } catch (exc) {
+        return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
+    }
+};
