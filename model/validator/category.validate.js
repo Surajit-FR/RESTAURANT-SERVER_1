@@ -1,6 +1,6 @@
 const JOI = require('joi');
 
-module.exports = (RoleModel) => {
+module.exports = (CategoryModel) => {
     const CategorySchema = JOI.object({
         category_name: JOI.string().required().pattern(/^[a-zA-Z ]+$/).messages({
             "string.empty": "A name is required!",
@@ -9,5 +9,5 @@ module.exports = (RoleModel) => {
         category_desc: JOI.allow("").optional(),
     })
 
-    return CategorySchema.validate(RoleModel);
+    return CategorySchema.validate(CategoryModel);
 };
