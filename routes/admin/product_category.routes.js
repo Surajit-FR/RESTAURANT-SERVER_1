@@ -45,16 +45,23 @@ router.post('/add/new/product', [
 // Get all product
 router.get('/get/all/product', [
     RequestRate.Limiter,
-    // VerifyToken,
-    // Authorize(["*", "read"])
+    VerifyToken,
+    Authorize(["*", "read"])
 ], ProductController.GetAllProduct);
+
+// Get all product
+router.get('/get/product/details/:product_id', [
+    RequestRate.Limiter,
+    VerifyToken,
+    Authorize(["*", "read"])
+], ProductController.GetProductDetails);
 
 // Delete product
 router.delete('/delete/product/:product_id', [
     RequestRate.Limiter,
     VerifyToken,
     Authorize(["*", "delete"])
-], CategoryController.DeleteCategory);
+], ProductController.DeleteProduct);
 
 
 module.exports = router;

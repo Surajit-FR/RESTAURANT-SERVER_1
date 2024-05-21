@@ -10,7 +10,7 @@ const ProductSchema = new Schema({
     price: { type: String, required: true },
     availability: { type: String, required: true },
     visibility: { type: String, required: true },
-    categories: [{ type: Schema.Types.ObjectId, ref: 'category' }],
+    category: { type: Schema.Types.ObjectId, ref: 'category' },
     is_delete: { type: Boolean, default: false },
 }, { timestamps: true });
 

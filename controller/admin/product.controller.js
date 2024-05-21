@@ -3,7 +3,7 @@ const ProductModel = require('../../model/product.model');
 
 // CreateProduct
 exports.CreateProduct = async (req, res) => {
-    const { productTitle, offer, offerPercentage, productDescription, price, availability, visibility, categories } = req.body;
+    const { productTitle, offer, offerPercentage, productDescription, price, availability, visibility, category } = req.body;
 
     try {
         // Check if productImage exists in the request body
@@ -23,7 +23,7 @@ exports.CreateProduct = async (req, res) => {
             price: price.trim(),
             availability: availability.trim(),
             visibility: visibility.trim(),
-            categories: categories,
+            category: category,
         });
 
         // Save the product
@@ -71,6 +71,24 @@ exports.GetAllProduct = async (req, res) => {
     }
 }
 
+// GetProductDetails
+exports.GetProductDetails = async (req, res) => {
+    const { product_id } = req.params;
+
+    try {
+        const productDetails = await ProductModel
+            .findOne({ _id: product_id })
+            .populate({
+                'path': 'category',
+                'select': '-createdAt -updatedAt -__v'
+            });
+
+        return res.status(200).json({ success: true, message: "Data fetched successfully!", data: productDetails });
+    } catch (exc) {
+        return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
+    };
+};
+
 // DeleteProduct
 exports.DeleteProduct = async (req, res) => {
     const { product_id } = req.params;
@@ -85,12 +103,9 @@ exports.DeleteProduct = async (req, res) => {
                 message: "Product not found"
             });
         }
-        return res.status(200).json({
-            success: true,
-            message: "Product deleted successfully!"
-        });
+        return res.status(200).json({ success: true, message: "Product deleted successfully!" });
 
     } catch (exc) {
         return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
-    }
+    };
 };

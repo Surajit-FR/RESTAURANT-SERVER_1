@@ -6,6 +6,7 @@ const { HandleRegularLoginError } = require('../middleware/auth/creds_validation
 const { DuplicateUserCheck } = require('../middleware/auth/duplicate_check');
 const AuthController = require('../controller/auth/auth.controller');
 const ValidateUser = require('../model/validator/user.validate');
+const { VerifyToken } = require('../middleware/auth/auth_user');
 
 /**************************************************** AUTH ROUTES ****************************************************/
 
@@ -13,6 +14,8 @@ const ValidateUser = require('../model/validator/user.validate');
 router.post('/register', [RequestRate.Limiter, ModelAuth(ValidateUser), DuplicateUserCheck], AuthController.RegisterRegular);
 // Login
 router.post('/login', [RequestRate.Limiter, HandleRegularLoginError], AuthController.LoginRegular);
+// Login
+router.post('/update/theme', [RequestRate.Limiter, VerifyToken], AuthController.SetWebSiteTheme);
 
 
 module.exports = router;

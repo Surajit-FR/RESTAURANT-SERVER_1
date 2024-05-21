@@ -27,9 +27,8 @@ module.exports = (ProductModel) => {
         visibility: JOI.string().required().messages({
             "string.empty": "A visibility selection is required!",
         }),
-        categories: JOI.array().items(JOI.string()).min(1).required().messages({
-            "array.min": "At least one category is required!",
-            "any.required": "At least one category is required!",
+        category: JOI.string().required().messages({
+            "string.empty": "A category is required!",
         }),
     });
 

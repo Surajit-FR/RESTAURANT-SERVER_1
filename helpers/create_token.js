@@ -9,6 +9,7 @@ const CreateToken = (user) => {
         phone: user.phone,
         password: user.password,
         role: user.role,
+        web_theme: user.web_theme,
         remember_me: user.remember_me,
         is_active: user.is_active,
         is_delete: user.is_delete,
