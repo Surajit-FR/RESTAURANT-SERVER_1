@@ -41,19 +41,49 @@ exports.CreateProduct = async (req, res) => {
 exports.GetAllProduct = async (req, res) => {
     try {
         // Pagination parameters
-        const page = parseInt(req.query.page);
-        const pageSize = parseInt(req.query.pageSize);
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 10;
+
+        // Search and filter parameters
+        const searchQuery = req.query.search || '';
+        const category = req.query.category;
+
+        const minPrice = parseFloat(req.query.minPrice) || 0;
+        const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_SAFE_INTEGER;
+
+        // Build query object
+        let query = { is_delete: false };
+
+        // Add search condition
+        if (searchQuery) {
+            query.$or = [
+                { productTitle: { $regex: searchQuery, $options: 'i' } },
+                // { productDescription: { $regex: searchQuery, $options: 'i' } }
+            ];
+        };
+
+        // Add category filter if category is not empty
+        if (category) {
+            query.category = category;
+        }
+
+        // Add price range filter
+        if (minPrice >= 0 && maxPrice < Number.MAX_SAFE_INTEGER) {
+            query.price = { $gte: minPrice, $lte: maxPrice };
+        }
 
         // Calculate skip value
         const skip = (page - 1) * pageSize;
+
+        // Fetch products with the constructed query and pagination
         const all_product_data = await ProductModel
-            .find({ is_delete: false })
+            .find(query)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(pageSize);
 
-        // Count total number of documents
-        const totalCount = await ProductModel.countDocuments({ is_delete: false });
+        // Count total number of documents matching the query
+        const totalCount = await ProductModel.countDocuments(query);
 
         // Calculate total pages
         const totalPages = Math.ceil(totalCount / pageSize);
@@ -67,9 +97,10 @@ exports.GetAllProduct = async (req, res) => {
         });
 
     } catch (exc) {
+        console.log(exc);
         return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
     }
-}
+};
 
 // GetProductDetails
 exports.GetProductDetails = async (req, res) => {

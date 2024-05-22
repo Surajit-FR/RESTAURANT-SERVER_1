@@ -35,7 +35,7 @@ exports.GetAllCategory = async (req, res) => {
         // Fetch category data with pagination
         const all_category_data = await CategoryModel
             .find({ is_delete: false })
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: 1 })
             .skip(skip)
             .limit(pageSize);
 
