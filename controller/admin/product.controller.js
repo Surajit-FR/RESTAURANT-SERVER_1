@@ -172,10 +172,7 @@ exports.DeleteProduct = async (req, res) => {
         const product = await ProductModel.findById(product_id);
 
         if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: "Product not found"
-            });
+            return res.status(404).json({ success: false, message: "Product not found" });
         }
 
         // Get the image path

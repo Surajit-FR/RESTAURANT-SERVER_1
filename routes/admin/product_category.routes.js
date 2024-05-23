@@ -25,6 +25,14 @@ router.get('/get/all/category', [
     Authorize(["*", "read"])
 ], CategoryController.GetAllCategory);
 
+// Update category
+router.post('/update/category/:category_id', [
+    RequestRate.Limiter,
+    VerifyToken,
+    ModelAuth(ValidateCategory),
+    Authorize(["*", "delete"])
+], CategoryController.UpdateCategory);
+
 // Delete category
 router.delete('/delete/category/:category_id', [
     RequestRate.Limiter,

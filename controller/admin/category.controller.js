@@ -58,6 +58,28 @@ exports.GetAllCategory = async (req, res) => {
     }
 };
 
+// UpdateCategory
+exports.UpdateCategory = async (req, res) => {
+    const { category_name, category_desc } = req.body;
+    const { category_id } = req.params;
+
+    try {
+        await CategoryModel.findByIdAndUpdate(
+            { _id: category_id },
+            {
+                category_name: category_name.trim(),
+                category_desc: category_desc.trim(),
+            },
+            { new: true }
+        );
+
+        return res.status(200).json({ success: true, message: "Category updated successfully!" });
+
+    } catch (exc) {
+        return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
+    }
+};
+
 // DeleteCategory
 exports.DeleteCategory = async (req, res) => {
     const { category_id } = req.params;
