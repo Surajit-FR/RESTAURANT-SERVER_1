@@ -1,5 +1,7 @@
 const { deleteUploadedFile } = require('../../helpers/delete_file');
 const ProductModel = require('../../model/product.model');
+const fs = require('fs');
+const path = require('path');
 
 // CreateProduct
 exports.CreateProduct = async (req, res) => {
@@ -166,18 +168,35 @@ exports.DeleteProduct = async (req, res) => {
     const { product_id } = req.params;
 
     try {
-        // Find and delete the product by ID
-        const deletedProduct = await ProductModel.findByIdAndDelete({ _id: product_id });
+        // Find the product by ID
+        const product = await ProductModel.findById(product_id);
 
-        if (!deletedProduct) {
+        if (!product) {
             return res.status(404).json({
                 success: false,
                 message: "Product not found"
             });
         }
-        return res.status(200).json({ success: true, message: "Product deleted successfully!" });
+
+        // Get the image path
+        const imagePath = product.productImage;
+
+        // Construct the correct absolute path
+        const absoluteImagePath = path.join(__dirname, '..', '..', 'public', 'product_images', 'uploads', path.basename(imagePath));
+
+        // Delete the product from the database
+        await ProductModel.findByIdAndDelete(product_id);
+
+        // Delete the image file from the file system using fs.promises
+        fs.unlink(absoluteImagePath, (err) => {
+            if (err) {
+                console.error("Error deleting image file:", err);
+                return res.status(500).json({ success: false, message: "Product deleted but failed to delete image file" });
+            };
+            return res.status(200).json({ success: true, message: "Product deleted successfully!" });
+        });
 
     } catch (exc) {
         return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
-    };
+    }
 };
