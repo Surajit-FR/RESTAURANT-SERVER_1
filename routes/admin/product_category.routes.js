@@ -56,6 +56,15 @@ router.get('/get/product/details/:product_id', [
     Authorize(["*", "read"])
 ], ProductController.GetProductDetails);
 
+// Update product
+router.post('/update/product/:product_id', [
+    RequestRate.Limiter,
+    ImageUpload.single('productImage'),
+    ModelAuth(ValidateProduct),
+    VerifyToken,
+    Authorize(["*", "edit_update"])
+], ProductController.UpdateProduct);
+
 // Delete product
 router.delete('/delete/product/:product_id', [
     RequestRate.Limiter,

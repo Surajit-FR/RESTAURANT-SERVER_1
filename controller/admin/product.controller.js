@@ -120,6 +120,47 @@ exports.GetProductDetails = async (req, res) => {
     };
 };
 
+// UpdateProduct
+exports.UpdateProduct = async (req, res) => {
+    const { productTitle, offer, offerPercentage, productDescription, price, availability, visibility, category } = req.body;
+    const { product_id } = req.params;
+
+    try {
+        let updateFields = {
+            productTitle: productTitle.trim(),
+            offer: offer.trim(),
+            offerPercentage: offerPercentage.trim(),
+            productDescription: productDescription.trim(),
+            price: price.trim(),
+            availability: availability.trim(),
+            visibility: visibility.trim(),
+            category: category,
+        };
+
+        // Check if a new product image is uploaded
+        if (req.file && req.file.path) {
+            // Remove "public" prefix from file path
+            const filePath = req.file.path.replace('public', '');
+            updateFields.productImage = filePath;
+        }
+
+        await ProductModel.findByIdAndUpdate(
+            { _id: product_id },
+            updateFields,
+            { new: true }
+        );
+
+        return res.status(200).json({ success: true, message: "Product updated successfully!" });
+
+    } catch (exc) {
+        // Delete uploaded file if an error occurred during upload
+        if (req.file) {
+            deleteUploadedFile(req);
+        }
+        return res.status(500).json({ success: false, message: "Internal server error", error: exc.message });
+    }
+};
+
 // DeleteProduct
 exports.DeleteProduct = async (req, res) => {
     const { product_id } = req.params;
