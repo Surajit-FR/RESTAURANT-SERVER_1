@@ -15,14 +15,14 @@ router.post('/add/new/category', [
     RequestRate.Limiter,
     ModelAuth(ValidateCategory),
     VerifyToken,
-    Authorize(["*", "write_create"])
+    Authorize(["all", "write_create"])
 ], CategoryController.CreateCategory);
 
 // Get all category
 router.get('/get/all/category', [
     RequestRate.Limiter,
     VerifyToken,
-    Authorize(["*", "read"])
+    Authorize(["all", "read"])
 ], CategoryController.GetAllCategory);
 
 // Update category
@@ -30,14 +30,14 @@ router.post('/update/category/:category_id', [
     RequestRate.Limiter,
     VerifyToken,
     ModelAuth(ValidateCategory),
-    Authorize(["*", "delete"])
+    Authorize(["all", "delete"])
 ], CategoryController.UpdateCategory);
 
 // Delete category
 router.delete('/delete/category/:category_id', [
     RequestRate.Limiter,
     VerifyToken,
-    Authorize(["*", "delete"])
+    Authorize(["all", "delete"])
 ], CategoryController.DeleteCategory);
 
 /**************************************************** PRODUCT ROUTES ****************************************************/
@@ -47,21 +47,21 @@ router.post('/add/new/product', [
     ImageUpload.single('productImage'),
     ModelAuth(ValidateProduct),
     VerifyToken,
-    Authorize(["*", "write_create"])
+    Authorize(["all", "write_create"])
 ], ProductController.CreateProduct);
 
 // Get all product
 router.get('/get/all/product', [
     RequestRate.Limiter,
     VerifyToken,
-    Authorize(["*", "read"])
+    Authorize(["all", "read"])
 ], ProductController.GetAllProduct);
 
 // Get all product
 router.get('/get/product/details/:product_id', [
     RequestRate.Limiter,
     VerifyToken,
-    Authorize(["*", "read"])
+    Authorize(["all", "read"])
 ], ProductController.GetProductDetails);
 
 // Update product
@@ -70,14 +70,14 @@ router.post('/update/product/:product_id', [
     ImageUpload.single('productImage'),
     ModelAuth(ValidateProduct),
     VerifyToken,
-    Authorize(["*", "edit_update"])
+    Authorize(["all", "edit_update"])
 ], ProductController.UpdateProduct);
 
 // Delete product
 router.delete('/delete/product/:product_id', [
     RequestRate.Limiter,
     VerifyToken,
-    Authorize(["*", "delete"])
+    Authorize(["all", "delete"])
 ], ProductController.DeleteProduct);
 
 
