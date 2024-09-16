@@ -23,6 +23,8 @@ import permissionRoutes from "./routes/permission.routes";
 import roleRoutes from "./routes/role.routes";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
+import productRoutes from "./routes/product.routes";
+import categoryRoutes from "./routes/category.routes";
 
 // routes declaration
 app.use("/api/v1/healthcheck", healthcheckRoute);
@@ -30,6 +32,8 @@ app.use("/api/v1/admin/permission", permissionRoutes);
 app.use("/api/v1/admin/role", roleRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/category", categoryRoutes);
 
 
 app.get('/ping', (req: Request, res: Response) => {

@@ -4,6 +4,7 @@ import {
     changeCurrentPassword,
     getCurrentUser,
     updateAccountDetails,
+    updateTheme,
 } from "../controllers/user.controller";
 
 const router: Router = express.Router();
@@ -19,5 +20,8 @@ router.route('/current-user')
 
 router.route('/update-account')
     .patch(updateAccountDetails);
+
+router.route('/update-theme')
+    .patch(updateTheme);
 
 export default router;

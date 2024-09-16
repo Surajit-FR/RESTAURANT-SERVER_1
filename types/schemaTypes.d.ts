@@ -27,20 +27,25 @@ export type TUser = IDocumentBase & {
     isDeleted?: boolean;
 };
 
-export interface TProduct {
+export type TProduct = IDocumentBase & {
     productTitle: string;
     offer: 'true' | 'false';
     offerPercentage?: string;
     coverImage: string;
-    productImages: string[];
+    productImages: Array<string>;
     productDescription?: string;
     price: string;
     availability: 'in_stock' | 'out_of_stock' | 'pre_order';
     visibility: 'public' | 'private';
-    category: string | ObjectId; // ObjectId as string
-    tags?: string[];
-    sku?: string; // Stock Keeping Unit
-    is_delete: boolean;
-    createdAt?: Date;
-    updatedAt?: Date;
+    category: string | ObjectId;
+    tags?: Array<string>;
+    sku?: string;
+    isDelete: boolean;
+};
+
+export type TCategory = IDocumentBase & {
+    categoryID: string;
+    categoryName: string;
+    categoryDesc: string;
+    isDelete: boolean;
 };

@@ -73,7 +73,7 @@ const ProductSchema = new Schema<TProduct>({
         unique: true,
         sparse: true, // SKU can be optional, but must be unique if present
     },
-    is_delete: {
+    isDelete: {
         type: Boolean,
         default: false,
     },

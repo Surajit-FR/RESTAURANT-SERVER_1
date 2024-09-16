@@ -33,13 +33,6 @@ const validateProduct = (productModel: TProduct) => {
                     }),
                 otherwise: Joi.forbidden(),
             }),
-        coverImage: Joi.string().required().messages({
-            "string.empty": "Cover image is required",
-        }),
-        productImages: Joi.array().items(Joi.string().required()).min(1).messages({
-            "array.min": "At least one product image is required",
-            "string.empty": "Product image cannot be empty",
-        }),
         productDescription: Joi.string().max(1000).optional().allow("").messages({
             "string.max": "Product description can have at most 1000 characters",
         }),
@@ -67,7 +60,7 @@ const validateProduct = (productModel: TProduct) => {
         sku: Joi.string().optional().allow("").messages({
             "string.base": "SKU must be a string",
         }),
-        is_delete: Joi.boolean().default(false).messages({
+        isDelete: Joi.boolean().default(false).messages({
             "boolean.base": "Is delete must be a boolean",
         }),
     }).unknown(true); // Allow unknown fields if necessary

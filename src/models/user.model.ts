@@ -32,7 +32,7 @@ const UserSchema: Schema<TUser> = new Schema({
     },
     role: {
         type: Schema.Types.ObjectId,
-        ref: 'role'
+        ref: 'Role'
     },
     isActive: {
         type: Boolean,
