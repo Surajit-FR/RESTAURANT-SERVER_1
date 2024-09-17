@@ -62,7 +62,7 @@ const ProductSchema = new Schema<TProduct>({
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: 'category',
+        ref: 'Category',
         required: true,
     },
     tags: [{

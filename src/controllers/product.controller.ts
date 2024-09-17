@@ -5,6 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 import { sendErrorResponse, sendSuccessResponse } from "../utils/response";
 import { ApiError } from "../utils/ApiError";
 import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary";
+import mongoose from "mongoose";
 
 
 // addProduct  controller
@@ -86,13 +87,30 @@ export const getSingleProduct = asyncHandler(async (req: CustomRequest, res: Res
     const { productId } = req.params;
     if (!productId) {
         return sendErrorResponse(res, new ApiError(400, "Product ID is required."));
-    };
+    }
 
-    const product = await ProductModel.findById(productId);
-    if (!product) {
+    const product = await ProductModel.aggregate([
+        {
+            $match: { _id: new mongoose.Types.ObjectId(productId) }
+        },
+        {
+            $lookup: {
+                from: 'categories',
+                localField: 'category',
+                foreignField: '_id',
+                as: 'category'
+            }
+        },
+        {
+            $unwind: '$category'
+        }
+    ]);
+
+    if (!product || product.length === 0) {
         return sendErrorResponse(res, new ApiError(404, "Product not found"));
     };
-    return sendSuccessResponse(res, 200, product, "Product fetched successfully");
+
+    return sendSuccessResponse(res, 200, product[0], "Product fetched successfully");
 });
 
 // getAllProducts  controller
