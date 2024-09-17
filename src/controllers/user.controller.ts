@@ -105,7 +105,7 @@ export const updateTheme = asyncHandler(async (req: CustomRequest, res: Response
         return sendErrorResponse(res, new ApiError(400, "All fields are required"));
     };
 
-    const user = await UserModel.findByIdAndUpdate(
+    await UserModel.findByIdAndUpdate(
         req.user?._id,
         {
             $set: {
@@ -115,5 +115,5 @@ export const updateTheme = asyncHandler(async (req: CustomRequest, res: Response
         { new: true }
     ).select("-password");
 
-    return sendSuccessResponse(res, 200, user, "Account details successfully");
+    return sendSuccessResponse(res, 200, {}, "Theme updated successfully");
 });
