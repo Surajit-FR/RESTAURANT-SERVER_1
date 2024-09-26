@@ -13,12 +13,13 @@ const validateProduct = (productModel: TProduct) => {
             "string.empty": "Offer status is required",
         }),
         offerPercentage: Joi.string()
+            .allow("") // Allow empty string
             .when('offer', {
                 is: 'true',
                 then: Joi.string()
-                    .pattern(/^\d+$/)
-                    .min(1)
-                    .max(3)
+                    .pattern(/^\d+$/) // Must be a number string
+                    .min(1) // At least one character
+                    .max(3) // Maximum of 3 characters
                     .custom((value, helpers) => {
                         const num = parseFloat(value);
                         if (num < 0 || num > 100) {
@@ -31,7 +32,7 @@ const validateProduct = (productModel: TProduct) => {
                         "string.pattern.base": "Offer percentage must be a number",
                         "number.outOfRange": "Offer percentage must be between 0 and 100",
                     }),
-                otherwise: Joi.forbidden(),
+                otherwise: Joi.allow(''), // Allow empty string when offer is false
             }),
         productDescription: Joi.string().max(1000).optional().allow("").messages({
             "string.max": "Product description can have at most 1000 characters",

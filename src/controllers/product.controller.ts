@@ -103,6 +103,18 @@ export const getSingleProduct = asyncHandler(async (req: CustomRequest, res: Res
         },
         {
             $unwind: '$category'
+        },
+        {
+            $project: {
+                'createdAt': 0,
+                'updatedAt': 0,
+                'isDelete': 0,
+                '__v': 0,
+                'category.createdAt': 0,
+                'category.updatedAt': 0,
+                'category.isDelete': 0,
+                'category.__v': 0
+            }
         }
     ]);
 
@@ -115,7 +127,7 @@ export const getSingleProduct = asyncHandler(async (req: CustomRequest, res: Res
 
 // getAllProducts  controller
 export const getAllProducts = asyncHandler(async (req: CustomRequest, res: Response) => {
-    const { page = "1", limit = "10", query, sortBy = "createdAt", sortType = "desc" } = req.query;
+    const { page = "1", limit = "10", query, sortBy = "createdAt", sortType = "desc", filterId } = req.query;
 
     const pageNumber = Number(page);
     const limitNumber = Number(limit);
@@ -130,17 +142,21 @@ export const getAllProducts = asyncHandler(async (req: CustomRequest, res: Respo
     const validSortFields = ["productTitle", "productDescription", "price", "category", "availability", "createdAt", "updatedAt"];
     const sortField = validSortFields.includes(sortBy as string) ? sortBy as string : "createdAt";
 
+    // Build the match criteria
+    const matchCriteria: any = {
+        ...(query && {
+            $or: [
+                { productTitle: { $regex: query as string, $options: "i" } },
+                { productDescription: { $regex: query as string, $options: "i" } }
+            ]
+        }),
+        ...(filterId && filterId !== "" && mongoose.isValidObjectId(filterId) && { category: new mongoose.Types.ObjectId(filterId as string) })
+    };
+
     // Execute the aggregation pipeline
     const results = await ProductModel.aggregate([
         {
-            $match: {
-                ...(query && {
-                    $or: [
-                        { productTitle: { $regex: query as string, $options: "i" } },
-                        { productDescription: { $regex: query as string, $options: "i" } }
-                    ]
-                }),
-            }
+            $match: matchCriteria
         },
         {
             $sort: {
@@ -156,7 +172,6 @@ export const getAllProducts = asyncHandler(async (req: CustomRequest, res: Respo
             }
         }
     ]);
-
 
     const totalProducts = results[0]?.metadata[0]?.totalProducts || 0;
     const products = results[0]?.data || [];

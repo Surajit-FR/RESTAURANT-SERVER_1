@@ -14,8 +14,7 @@ import validateProduct from "../models/validators/product.validator";
 const router: Router = express.Router();
 router.use(VerifyJWTToken); // Apply verifyJWT middleware to all routes in this file
 
-router
-    .route("/")
+router.route("/")
     .get(getAllProducts)
     .post(
         upload.fields([
@@ -26,8 +25,7 @@ router
         addProduct
     );
 
-router
-    .route("/:productId")
+router.route("/:productId")
     .get(getSingleProduct)
     .patch(
         upload.fields([
